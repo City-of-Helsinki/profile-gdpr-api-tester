@@ -1,0 +1,7 @@
+.env
+.python-version
+/dist
+/build
+/venv
+gdpr_api_tester_key.pem
+gdpr_api_tester.egg-info

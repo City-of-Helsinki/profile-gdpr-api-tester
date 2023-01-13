@@ -1,0 +1,6 @@
+aioconsole
+aiohttp
+colorama
+pip-tools
+python-dotenv
+python-jose

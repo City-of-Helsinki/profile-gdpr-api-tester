@@ -1,0 +1,36 @@
+[project]
+name = "gdpr-api-tester"
+version = "0.0.1"
+authors = [
+  { name="Mikko Keskinen", email="mikko.keskinen@hel.fi" },
+]
+description = "Helsinki Profile GDPR API Tester"
+readme = "README.md"
+license = {file = "LICENSE"}
+requires-python = ">=3.10"
+classifiers = [
+    "Intended Audience :: Developers",
+    "Environment :: Console",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Topic :: Software Development :: Quality Assurance",
+]
+dynamic = ["dependencies"]
+
+[project.urls]
+"Homepage" = "https://github.com/City-of-Helsinki/profile-gdpr-api-tester"
+"Bug Tracker" = "https://github.com/City-of-Helsinki/profile-gdpr-api-tester/issues"
+
+[project.scripts]
+gdpr_api_tester = "gdpr_api_tester.main:main"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
+[tool.setuptools.packages]
+find = {}

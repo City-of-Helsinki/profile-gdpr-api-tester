@@ -2,10 +2,16 @@ import os
 
 from dotenv import find_dotenv, load_dotenv
 
+# Find the dotenv path by using the current directory
+#
+# By default, dotenv would try to find the .env file from the same directory where this
+# file is located which wouldn't work if the gdpr_api_tester package is in a virtualenv
+# or such.
 load_dotenv(dotenv_path=find_dotenv(usecwd=True))
 
 
 class AppConfig:
+    """Simple class for holding configuration values with support for a default value"""
     # The issuer in the generated API tokens and the address of the GDPR API Tester
     #   e.g. http://127.0.0.1:8888/
     #   The API must have connectivity to this address because the JWT token
@@ -55,13 +61,12 @@ class AppConfig:
         return [field for field in self.__annotations__ if field.isupper()]
 
     def __init__(self, env):
-        for field in self.__annotations__:
-            if not field.isupper():
-                continue
-
+        for field in self.get_keys():
             default_value = getattr(self, field, None)
             if default_value is None and env.get(field) is None:
-                raise RuntimeError("The {} field is required".format(field))
+                raise RuntimeError(
+                    "The configuration field \"{}\" is required".format(field)
+                )
 
             self.__setattr__(field, env.get(field, default_value))
 
@@ -73,4 +78,6 @@ class AppConfig:
         return result
 
 
+# app_config is effectively a singleton as Python doesn't run the code multiple
+# times when importing.
 app_config = AppConfig(os.environ)

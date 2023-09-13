@@ -29,10 +29,15 @@ Commands:
  exit - Quit the GDPR API Tester
 """
 
+# An event used to exit the tester
 STOP_EVENT = asyncio.Event()
 
 
-def get_gdpr_url():
+def get_gdpr_url() -> str:
+    """Constructs and returns the GDPR URL
+
+    Constructs the GDPR URL the same way the Profile Back end constructs it.
+    """
     url_template = Template(app_config.GDPR_API_URL)
     mapping = {
         "profile_id": app_config.PROFILE_ID,
@@ -317,9 +322,15 @@ async def read_command():
 
 
 async def run():
+    """Coroutine that runs the OIDC simulator and the command prompt"""
+    # Initialize aiohttp Application
     app = web.Application()
     app.add_routes(routes)
 
+    # Run the aiohttp Application as a TCP server listening on port 8888
+    # We are not using the aiohttp.web.run_app method because that is blocking, and we
+    # want to also run the command prompt. See aiohttp docs for more information:
+    # https://docs.aiohttp.org/en/stable/web_advanced.html#application-runners
     await aprint("Starting OIDC simulator")
     runner = web.AppRunner(app)
     await runner.setup()
@@ -328,17 +339,27 @@ async def run():
     await aprint("Starting command prompt")
     asyncio.create_task(read_command())
 
+    # Wait here until the STOP_EVENT event is set. The event is used to quit the tester.
     await STOP_EVENT.wait()
+
+    await runner.cleanup()
 
 
 def main():
+    """The main entry point of the tester"""
+    # The following command makes ANSI escapes to work on Windows
+    # TODO: Untested
     just_fix_windows_console()
     print("GDPR API Tester v0.0.1\n")
     print(app_config, flush=True)
 
-    from .rsa_key import rsa_key  # NOQA: Initialize RSA Key
+    # The following import is done here to generate the RSA key only when the tool
+    # is run and not when this module is imported
+    from .rsa_key import rsa_key  # NOQA: F401 imported but unused
 
     try:
         asyncio.run(run())
     except KeyboardInterrupt:
+        # Catch the KeyboardInterrupt exception if the user quits the tester by using
+        # CTRL-C key combination. There is no need to show the stack trace in that case.
         pass

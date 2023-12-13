@@ -13,8 +13,11 @@ async def handle_openid_configuration(request):
     match everything that ends in ".well-known/openid-configuration" to support
     ISSUER values with path parts.
 
-    Only issuer and jwks_uri configuration values are returned as they are the only
-    ones that are needed when validating tokens."""
+    Only issuer and jwks_uri configuration values are necessary for validating
+    the tokens, but authorization_endpoint, response_types_supported,
+    subject_types_supported and id_token_signing_alg_values_supported are
+    required by the spec.
+    """
     jwks_uri = (
         app_config.ISSUER
         + ("/" if not app_config.ISSUER.endswith("/") else "")
@@ -23,7 +26,18 @@ async def handle_openid_configuration(request):
 
     data = {
         "issuer": app_config.ISSUER,
+        "authorization_endpoint": "https://localhost/openid/authorize",
         "jwks_uri": jwks_uri,
+        "response_types_supported": [
+            "code",
+            "id_token",
+            "id_token token",
+            "code token",
+            "code id_token",
+            "code id_token token",
+        ],
+        "subject_types_supported": ["public"],
+        "id_token_signing_alg_values_supported": ["HS256", "RS256"],
     }
 
     return web.json_response(data)

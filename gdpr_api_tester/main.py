@@ -76,7 +76,7 @@ def generate_api_token(scopes=None):
     return token, claims
 
 
-RESPONSE_CODE_EXPLANATION = {
+COMMON_RESPONSE_CODE_EXPLANATION = {
     400: Fore.RED
     + "Failure. "
     + Style.RESET_ALL
@@ -85,11 +85,6 @@ RESPONSE_CODE_EXPLANATION = {
     + "Failure. "
     + Style.RESET_ALL
     + "Credentials in the request were missing or were invalid.",
-    403: Fore.YELLOW
-    + "Deletion denied. "
-    + Style.RESET_ALL
-    + "Data could not be removed from the service.\n\n"
-    + "The reason(s) for the failure may be detailed in the response:",
     404: Fore.RED
     + "Failure. "
     + Style.RESET_ALL
@@ -133,6 +128,8 @@ def is_valid_gdpr_api_errors(response_json):
 
 
 async def get_query_explanation(response):
+    QUERY_RESPONSE_CODE_EXPLANATION = COMMON_RESPONSE_CODE_EXPLANATION.copy()
+
     explanation = (
         f"Response status code: {response.status}\n"
         f"How the Profile back-end would interpret the response:\n\n"
@@ -159,8 +156,8 @@ async def get_query_explanation(response):
             )
             explanation += response_content
     else:
-        if response.status != 403 and response.status in RESPONSE_CODE_EXPLANATION:
-            explanation += RESPONSE_CODE_EXPLANATION[response.status] + "\n"
+        if response.status in QUERY_RESPONSE_CODE_EXPLANATION:
+            explanation += QUERY_RESPONSE_CODE_EXPLANATION[response.status] + "\n"
         else:
             explanation += Fore.RED + "Unknown response status code\n" + Style.RESET_ALL
 
@@ -176,6 +173,15 @@ async def get_query_explanation(response):
 
 
 async def get_delete_explanation(response, dry_run=False):
+    DELETE_RESPONSE_CODE_EXPLANATION = COMMON_RESPONSE_CODE_EXPLANATION.copy()
+    DELETE_RESPONSE_CODE_EXPLANATION.update({
+        403: Fore.YELLOW
+        + "Deletion denied. "
+        + Style.RESET_ALL
+        + "Data could not be removed from the service.\n\n"
+        + "The reason(s) for the failure may be detailed in the response:",
+    })
+
     explanation = (
         f"Response status code: {response.status}\n"
         f"How the Profile back-end would interpret the response:\n\n"
@@ -197,8 +203,8 @@ async def get_delete_explanation(response, dry_run=False):
 
         return explanation
 
-    if response.status in RESPONSE_CODE_EXPLANATION:
-        explanation += RESPONSE_CODE_EXPLANATION[response.status] + "\n"
+    if response.status in DELETE_RESPONSE_CODE_EXPLANATION:
+        explanation += DELETE_RESPONSE_CODE_EXPLANATION[response.status] + "\n"
     else:
         explanation += "Unknown response status code\n"
 

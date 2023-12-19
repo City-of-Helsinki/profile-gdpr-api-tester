@@ -88,7 +88,7 @@ COMMON_RESPONSE_CODE_EXPLANATION = {
     404: Fore.RED
     + "Failure. "
     + Style.RESET_ALL
-    + "Data could not be found with the given user/profile id",
+    + "GDPR API not found. Misconfigured?",
     500: Fore.RED
     + "Failure. "
     + Style.RESET_ALL
@@ -129,6 +129,11 @@ def is_valid_gdpr_api_errors(response_json):
 
 async def get_query_explanation(response):
     QUERY_RESPONSE_CODE_EXPLANATION = COMMON_RESPONSE_CODE_EXPLANATION.copy()
+    QUERY_RESPONSE_CODE_EXPLANATION.update({
+        204: Fore.GREEN
+        + "Success. There is no personal data related to the profile.\n"
+        + Style.RESET_ALL,
+    })
 
     explanation = (
         f"Response status code: {response.status}\n"

@@ -320,13 +320,13 @@ async def read_command():
             if arguments:
                 matches = re.match(r"(?P<key>\w+)\s*=\s*(?P<value>.*)", arguments)
                 if matches:
-                    if matches["key"] in app_config.get_keys():
+                    try:
+                        app_config.set_config(matches["key"], matches["value"])
                         await aprint(
                             "Set config", matches["key"], "value to", matches["value"]
                         )
-                        setattr(app_config, matches["key"], matches["value"])
-                    else:
-                        await aprint('Unknown config key: "{}"'.format(matches["key"]))
+                    except Exception as e:
+                        await aprint(str(e))
             else:
                 await aprint("set command needs arguments")
         else:

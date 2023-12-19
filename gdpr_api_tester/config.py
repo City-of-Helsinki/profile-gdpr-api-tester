@@ -68,7 +68,13 @@ class AppConfig:
                     "The configuration field \"{}\" is required".format(field)
                 )
 
-            self.__setattr__(field, env.get(field, default_value))
+            self.set_config(field, env.get(field, default_value))
+
+    def set_config(self, name, value):
+        if name not in self.get_keys():
+            raise ValueError('Unknown config key: "{}"'.format(name))
+
+        self.__setattr__(name, value)
 
     def __str__(self):
         result = "Configuration:\n"

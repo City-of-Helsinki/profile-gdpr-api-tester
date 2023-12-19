@@ -183,7 +183,7 @@ async def get_delete_explanation(response, dry_run=False):
         403: Fore.YELLOW
         + "Deletion denied. "
         + Style.RESET_ALL
-        + "Data could not be removed from the service.\n\n"
+        + "Data can not be removed from the service.\n\n"
         + "The reason(s) for the failure may be detailed in the response:",
     })
 
@@ -196,13 +196,14 @@ async def get_delete_explanation(response, dry_run=False):
         if not dry_run:
             explanation += (
                 Fore.GREEN
-                + "Success. The data has been deleted from the service.\n"
+                + "Success. The service no longer contains personal data for the profile.\n"
                 + Style.RESET_ALL
             )
         else:
             explanation += (
                 Fore.GREEN
-                + "Success. The data can be deleted from the service.\n"
+                + "Success. "
+                + "The service can do the needed so that it would no longer contain personal data for the profile.\n"
                 + Style.RESET_ALL
             )
 

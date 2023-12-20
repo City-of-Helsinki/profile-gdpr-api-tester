@@ -18,10 +18,10 @@ docker push ghcr.io/city-of-helsinki/profile-gdpr-api-tester:latest
 
 # Pypi
 
-Install build requirements
+Install build requirements (replace `<os>` with your operating system)
 
 ```shell
-pip install -r requirements.txt -r requirements-build.txt
+pip install -r requirements.txt -r requirements-build.<os>.txt
 ```
 
 Build the python distribution. The results will be in the [project_root]/dist-directory.

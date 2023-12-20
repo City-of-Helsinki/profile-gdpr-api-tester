@@ -87,7 +87,7 @@ The issuer in the generated API tokens and the address of the GDPR API Tester. T
 
 ### ISSUER_TYPE
 
-The type of the issuer (authorizaton server) that the GDPR API Tester simulates. Allowed values are "tunnistamo" and "keycloak".
+The type of the issuer (authorizaton server) that the GDPR API Tester simulates. The type affects the contents of the generated access tokens. Allowed values are "tunnistamo" and "keycloak".
 
 ### GDPR_API_AUDIENCE
 

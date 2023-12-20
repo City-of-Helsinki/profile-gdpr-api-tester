@@ -13,7 +13,7 @@ from colorama import Fore, Style, just_fix_windows_console
 from jose import jwt
 from jose.constants import ALGORITHMS
 
-from .config import app_config
+from .config import app_config, IssuerType
 from .routes import routes
 
 HELP_TEXT = """
@@ -67,7 +67,20 @@ def generate_api_token(scopes=None):
         "loa": app_config.LOA,
     }
     if scopes:
-        claims[app_config.GDPR_API_AUTHORIZATION_FIELD] = scopes
+        match app_config.ISSUER_TYPE:
+            case IssuerType.TUNNISTAMO:
+                claims[app_config.GDPR_API_AUTHORIZATION_FIELD] = scopes
+            case IssuerType.KEYCLOAK:
+                kc_scopes = [s.rsplit(".", 1)[-1] for s in scopes]
+                claims["authorization"] = {
+                    "permissions": [
+                        {
+                            "scopes": [
+                                kc_scopes
+                            ]
+                        }
+                    ]
+                }
 
     token = jwt.encode(
         claims, key=rsa_key, algorithm=ALGORITHMS.RS256, headers={"kid": kid}

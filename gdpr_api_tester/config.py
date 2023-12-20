@@ -29,6 +29,7 @@ class AppConfig:
     ISSUER: str
 
     # The type of the issuer (authorizaton server) that the GDPR API Tester simulates.
+    # The type affects the contents of the generated access tokens.
     # Allowed values are "tunnistamo" and "keycloak".
     ISSUER_TYPE: IssuerType = IssuerType.TUNNISTAMO
 
@@ -42,10 +43,16 @@ class AppConfig:
 
     # The GDPR query scope
     #   e.g. exampleapi.gdprquery
+    # When issuer type is Keycloak, only the part after the last dot is used.
+    # This makes for example the value `exampleapi.gdprquery` work
+    # correctly in every case.
     GDPR_API_QUERY_SCOPE: str
 
     # The GDPR delete scope
     #   e.g. exampleapi.gdprdelete
+    # When issuer type is Keycloak, only the part after the last dot is used.
+    # This makes for example the value `exampleapi.gdprdelete` work
+    # correctly in every case.
     GDPR_API_DELETE_SCOPE: str
 
     # The address of the GDPR API

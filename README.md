@@ -130,7 +130,7 @@ but it's included for completeness' sake.
 The tool starts as an interactive prompt the user can use to run commands.
 
 > Commands:
-> 
+>
 >  help - This help\
 >  config - Show configuration\
 >  keys - Print public and private keys used in the OIDC Simulator\
@@ -174,16 +174,16 @@ docker run -it -p 8000:8000 --env-file config.env example-backend
 
 See the [Running using Docker](#running-using-docker) section and set the following values in the configuration:
 
-    ISSUER=http://host.docker.internal:8888/                           
-    GDPR_API_AUDIENCE=http://example.com/exampleapi                               
-    GDPR_API_AUTHORIZATION_FIELD=http://example.com                                          
-    GDPR_API_QUERY_SCOPE=exampleapi.gdprquery                                        
-    GDPR_API_DELETE_SCOPE=exampleapi.gdprdelete                                       
+    ISSUER=http://host.docker.internal:8888/
+    GDPR_API_AUDIENCE=http://example.com/exampleapi
+    GDPR_API_AUTHORIZATION_FIELD=http://example.com
+    GDPR_API_QUERY_SCOPE=exampleapi.gdprquery
+    GDPR_API_DELETE_SCOPE=exampleapi.gdprdelete
     GDPR_API_URL=http://host.docker.internal:8000/gdpr-api/v1/user/$user_uuid
-    PROFILE_ID=65d4015d-1736-4848-9466-25d43a1fe8c7                        
-    USER_UUID=9e14df7c-81f6-4c41-8578-6aa7b9d0e5c0                        
-    LOA=substantial                                                 
-    SID=00000000-0000-4000-9000-000000000001                        
+    PROFILE_ID=65d4015d-1736-4848-9466-25d43a1fe8c7
+    USER_UUID=9e14df7c-81f6-4c41-8578-6aa7b9d0e5c0
+    LOA=substantial
+    SID=00000000-0000-4000-9000-000000000001
 
 You should be able to send requests to the example backend after the GDPR API Tester starts. e.g. issuing the "query" command should yield something like this:
 
@@ -264,7 +264,7 @@ sequenceDiagram
     actor User
     participant Profile UI
     participant Profile Backend
-    participant Service GDPR API 
+    participant Service GDPR API
     participant Tunnistamo
     User->>+Profile UI: Download my data
     Profile UI->>+Profile Backend: Get data
@@ -284,8 +284,8 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
     actor Tester
-    participant GDPR API Tester 
-    participant Service GDPR API 
+    participant GDPR API Tester
+    participant Service GDPR API
     GDPR API Tester->>GDPR API Tester: Generate RSA key
     Tester->>+GDPR API Tester: query
     GDPR API Tester->>GDPR API Tester: Generate API token

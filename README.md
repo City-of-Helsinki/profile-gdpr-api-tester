@@ -85,6 +85,10 @@ Following is a list of all the configuration options:
 
 The issuer in the generated API tokens and the address of the GDPR API Tester. The API must have connectivity to this address because the JWT token verification will fetch the public key from here.
 
+### ISSUER_TYPE
+
+The type of the issuer (authorizaton server) that the GDPR API Tester simulates. Allowed values are "tunnistamo" and "keycloak".
+
 ### GDPR_API_AUDIENCE
 
 The audience in the generated API tokens. i.e. The client id of the GDPR API.

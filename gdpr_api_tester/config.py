@@ -1,6 +1,16 @@
 import os
 
+from enum import Enum
+
 from dotenv import find_dotenv, load_dotenv
+
+class IssuerType(Enum):
+    TUNNISTAMO = "tunnistamo"
+    KEYCLOAK = "keycloak"
+
+    def __str__(self) -> str:
+        return self.value
+
 
 # Find the dotenv path by using the current directory
 #
@@ -17,6 +27,10 @@ class AppConfig:
     #   The API must have connectivity to this address because the JWT token
     #   verification will fetch the public key from here.
     ISSUER: str
+
+    # The type of the issuer (authorizaton server) that the GDPR API Tester simulates.
+    # Allowed values are "tunnistamo" and "keycloak".
+    ISSUER_TYPE: IssuerType = IssuerType.TUNNISTAMO
 
     # The audience in the generated API tokens and the client id of the GDPR API
     #   e.g. http://localhost:8080/exampleapi

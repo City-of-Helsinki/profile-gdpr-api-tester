@@ -74,7 +74,9 @@ class AppConfig:
         if name not in self.get_keys():
             raise ValueError('Unknown config key: "{}"'.format(name))
 
-        self.__setattr__(name, value)
+        typ = self.__annotations__[name]
+
+        self.__setattr__(name, typ(value))
 
     def __str__(self):
         result = "Configuration:\n"

@@ -1,2 +1,2 @@
--r requirements.txt
+-c requirements.txt
 twine

@@ -1,6 +1,5 @@
 [project]
 name = "gdpr-api-tester"
-version = "0.0.1"
 authors = [
   { name="Mikko Keskinen", email="mikko.keskinen@hel.fi" },
 ]
@@ -16,7 +15,7 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Topic :: Software Development :: Quality Assurance",
 ]
-dynamic = ["dependencies"]
+dynamic = ["dependencies", "version"]
 
 [project.urls]
 "Homepage" = "https://github.com/City-of-Helsinki/profile-gdpr-api-tester"
@@ -31,6 +30,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
+version = {file = "VERSION"}
 
 [tool.setuptools.packages]
 find = {}

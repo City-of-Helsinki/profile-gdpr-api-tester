@@ -1,6 +1,7 @@
 Building and releasing the GDPR API Tester
 ==========================================
 
+Update version number in `VERSION` file.
 
 # GitHub package
 

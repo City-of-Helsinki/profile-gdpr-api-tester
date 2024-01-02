@@ -72,15 +72,7 @@ def generate_api_token(scopes=None):
                 claims[app_config.GDPR_API_AUTHORIZATION_FIELD] = scopes
             case IssuerType.KEYCLOAK:
                 kc_scopes = [s.rsplit(".", 1)[-1] for s in scopes]
-                claims["authorization"] = {
-                    "permissions": [
-                        {
-                            "scopes": [
-                                kc_scopes
-                            ]
-                        }
-                    ]
-                }
+                claims["authorization"] = {"permissions": [{"scopes": kc_scopes}]}
 
     token = jwt.encode(
         claims, key=rsa_key, algorithm=ALGORITHMS.RS256, headers={"kid": kid}

@@ -40,7 +40,7 @@ pep517==0.13.0
     # via build
 pip-tools==7.3.0
     # via -r requirements.in
-pyasn1==0.4.8
+pyasn1==0.6.3
     # via
     #   python-jose
     #   rsa

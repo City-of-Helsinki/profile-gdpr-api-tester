@@ -5,3 +5,5 @@
 /venv
 gdpr_api_tester_key.pem
 gdpr_api_tester.egg-info
+.idea
+gdpr_api_tester/__pycache__

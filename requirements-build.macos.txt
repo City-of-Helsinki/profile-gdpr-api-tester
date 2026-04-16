@@ -68,7 +68,7 @@ typing-extensions==4.15.0
     # via
     #   -c requirements.txt
     #   cryptography
-urllib3==1.26.14
+urllib3==2.6.3
     # via
     #   requests
     #   twine

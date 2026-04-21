@@ -6,7 +6,7 @@ authors = [
 description = "Helsinki Profile GDPR API Tester"
 readme = "README.md"
 license = {file = "LICENSE"}
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 classifiers = [
     "Intended Audience :: Developers",
     "Environment :: Console",

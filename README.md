@@ -8,7 +8,7 @@ See [GDPR API Description](https://helsinkisolutionoffice.atlassian.net/wiki/spa
 
 # Requirements
 
-Python 3.10+ or Docker
+Python 3.12+ or Docker
 
 # Installing / Running
 

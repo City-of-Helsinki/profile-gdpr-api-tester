@@ -18,14 +18,12 @@ cryptography==46.0.7
     # via secretstorage
 docutils==0.19
     # via readme-renderer
-idna==3.4
+idna==3.11
     # via
     #   -c requirements.txt
     #   requests
 importlib-metadata==6.0.0
-    # via
-    #   keyring
-    #   twine
+    # via twine
 jaraco-classes==3.2.3
     # via keyring
 jeepney==0.9.0
@@ -58,17 +56,13 @@ rich==13.0.1
     # via twine
 secretstorage==3.5.0
     # via keyring
-six==1.16.0
+six==1.17.0
     # via
     #   -c requirements.txt
     #   bleach
 twine==4.0.2
     # via -r requirements-build.in
-typing-extensions==4.15.0
-    # via
-    #   -c requirements.txt
-    #   cryptography
-urllib3==2.6.3
+urllib3==2.7.0
     # via
     #   requests
     #   twine
@@ -76,4 +70,3 @@ webencodings==0.5.1
     # via bleach
 zipp==3.19.1
     # via importlib-metadata
-

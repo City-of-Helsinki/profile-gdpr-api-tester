@@ -8,7 +8,7 @@ aioconsole==0.8.2
     # via -r requirements.in
 aiohappyeyeballs==2.6.1
     # via aiohttp
-aiohttp==3.13.5
+aiohttp==3.14.1
     # via -r requirements.in
 aiosignal==1.4.0
     # via aiohttp
@@ -59,7 +59,9 @@ rsa==4.9.1
 six==1.17.0
     # via ecdsa
 typing-extensions==4.15.0
-    # via aiosignal
+    # via
+    #   aiohttp
+    #   aiosignal
 wheel==0.46.3
     # via pip-tools
 yarl==1.23.0

@@ -4,7 +4,7 @@
 #
 #    pip-compile requirements-build.in
 #
-bleach==5.0.1
+bleach==6.4.0
     # via readme-renderer
 certifi==2026.2.25
     # via requests
@@ -56,10 +56,6 @@ rich==13.0.1
     # via twine
 secretstorage==3.5.0
     # via keyring
-six==1.17.0
-    # via
-    #   -c requirements.txt
-    #   bleach
 twine==4.0.2
     # via -r requirements-build.in
 urllib3==2.7.0

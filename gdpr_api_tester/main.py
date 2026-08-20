@@ -81,22 +81,13 @@ def generate_api_token(scopes=None):
     return token, claims
 
 
+_FAILURE_PREFIX = Fore.RED + "Failure. " + Style.RESET_ALL
+
 COMMON_RESPONSE_CODE_EXPLANATION = {
-    400: Fore.RED
-    + "Failure. "
-    + Style.RESET_ALL
-    + "Parameters in the request failed validation",
-    401: Fore.RED
-    + "Failure. "
-    + Style.RESET_ALL
-    + "Credentials in the request were missing or were invalid.",
-    404: Fore.RED
-    + "Failure. "
-    + Style.RESET_ALL
-    + "GDPR API not found. Misconfigured?",
-    500: Fore.RED
-    + "Failure. "
-    + Style.RESET_ALL
+    400: _FAILURE_PREFIX + "Parameters in the request failed validation",
+    401: _FAILURE_PREFIX + "Credentials in the request were missing or were invalid.",
+    404: _FAILURE_PREFIX + "GDPR API not found. Misconfigured?",
+    500: _FAILURE_PREFIX
     + "There has been an unexpected error.\n\n"
     + "The error(s) may be detailed in the response:",
 }

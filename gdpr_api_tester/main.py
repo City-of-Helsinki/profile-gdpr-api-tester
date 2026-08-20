@@ -239,6 +239,41 @@ async def get_delete_explanation(response, dry_run=False):
     return explanation
 
 
+async def _handle_query_command():
+    response = await make_gdpr_api_request(
+        "get", [app_config.GDPR_API_QUERY_SCOPE]
+    )
+    if response:
+        await aprint(await get_query_explanation(response))
+
+
+async def _handle_delete_command(arguments):
+    dry_run = arguments and "dryrun" in arguments
+    params = {}
+    if dry_run:
+        params["dry_run"] = "true"
+    response = await make_gdpr_api_request(
+        "delete", [app_config.GDPR_API_DELETE_SCOPE], params
+    )
+    if response:
+        await aprint(await get_delete_explanation(response, dry_run=dry_run))
+
+
+async def _handle_set_command(arguments):
+    if arguments:
+        matches = re.match(r"(?P<key>\w+)\s*=\s*(?P<value>.*)", arguments)
+        if matches:
+            try:
+                app_config.set_config(matches["key"], matches["value"])
+                await aprint(
+                    "Set config", matches["key"], "value to", matches["value"]
+                )
+            except Exception as e:
+                await aprint(str(e))
+    else:
+        await aprint("set command needs arguments")
+
+
 async def make_gdpr_api_request(method, scopes, params=None):
     url = get_gdpr_url()
     (token, claims) = generate_api_token(scopes=scopes)
@@ -293,38 +328,15 @@ async def read_command():
             await aprint(rsa_key.public_key().to_pem("PKCS1").decode())
             await aprint(rsa_key.to_pem("PKCS1").decode())
         elif command == "query":
-            response = await make_gdpr_api_request(
-                "get", [app_config.GDPR_API_QUERY_SCOPE]
-            )
-            if response:
-                await aprint(await get_query_explanation(response))
+            await _handle_query_command()
         elif command == "delete":
-            dry_run = arguments and "dryrun" in arguments
-            params = {}
-            if dry_run:
-                params["dry_run"] = "true"
-            response = await make_gdpr_api_request(
-                "delete", [app_config.GDPR_API_DELETE_SCOPE], params
-            )
-            if response:
-                await aprint(await get_delete_explanation(response, dry_run=dry_run))
+            await _handle_delete_command(arguments)
         elif command == "exit" or line == "quit":
             await aprint("Exiting...")
             STOP_EVENT.set()
             return
         elif command == "set":
-            if arguments:
-                matches = re.match(r"(?P<key>\w+)\s*=\s*(?P<value>.*)", arguments)
-                if matches:
-                    try:
-                        app_config.set_config(matches["key"], matches["value"])
-                        await aprint(
-                            "Set config", matches["key"], "value to", matches["value"]
-                        )
-                    except Exception as e:
-                        await aprint(str(e))
-            else:
-                await aprint("set command needs arguments")
+            await _handle_set_command(arguments)
         else:
             await aprint(f'Unknown command "{line}". Use "help" for commands.')
 

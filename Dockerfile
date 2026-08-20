@@ -15,9 +15,10 @@ COPY requirements.txt requirements.txt
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 COPY /gdpr_api_tester /app/gdpr_api_tester
+COPY docker-entrypoint.sh /app/docker-entrypoint.sh
+
+RUN chmod +x /app/docker-entrypoint.sh
 
 EXPOSE 8888
 
-# The sleep is needed to make rlwrap work. Without the sleep rlwrap can't determine the terminal dimensions.
-# See this issue for more information: https://github.com/moby/moby/issues/28009
-CMD sleep 0.1; rlwrap python -m gdpr_api_tester
+CMD ["/app/docker-entrypoint.sh"]

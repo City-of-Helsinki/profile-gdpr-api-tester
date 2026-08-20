@@ -93,6 +93,19 @@ COMMON_RESPONSE_CODE_EXPLANATION = {
 }
 
 
+def _is_valid_gdpr_api_error(error):
+    if set(error.keys()) != {"code", "message"}:
+        return False
+    if not error.get("code") or not isinstance(error["code"], str):
+        return False
+    if not error.get("message") or not isinstance(error["message"], dict):
+        return False
+    for key, value in error["message"].items():
+        if not key or not isinstance(value, str):
+            return False
+    return True
+
+
 def is_valid_gdpr_api_errors(response_json):
     if not response_json:
         return False
@@ -107,20 +120,7 @@ def is_valid_gdpr_api_errors(response_json):
     except TypeError:
         return False
 
-    expected_keys = {"code", "message"}
-    for error in errors:
-        if set(error.keys()) != expected_keys:
-            return False
-        if not error.get("code") or not isinstance(error["code"], str):
-            return False
-        if not error.get("message") or not isinstance(error["message"], dict):
-            return False
-
-        for key, value in error["message"].items():
-            if not key or not isinstance(value, str):
-                return False
-
-    return True
+    return all(_is_valid_gdpr_api_error(error) for error in errors)
 
 
 async def get_query_explanation(response):

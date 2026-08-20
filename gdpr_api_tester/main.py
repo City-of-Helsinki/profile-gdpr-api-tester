@@ -354,10 +354,14 @@ async def run():
     await web.TCPSite(runner, port=8888).start()
 
     await aprint("Starting command prompt")
-    asyncio.create_task(read_command())
+    command_task = asyncio.create_task(read_command())
 
     # Wait here until the STOP_EVENT event is set. The event is used to quit the tester.
     await STOP_EVENT.wait()
+
+    if not command_task.done():
+        command_task.cancel()
+        await asyncio.gather(command_task, return_exceptions=True)
 
     await runner.cleanup()
 

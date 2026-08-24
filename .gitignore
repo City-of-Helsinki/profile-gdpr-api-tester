@@ -1,11 +1,23 @@
+# Environment and local settings
 .env
 .python-version
+/venv
+
+# Build and packaging artifacts
 /dist
 /build
-/venv
-gdpr_api_tester_key.pem
 gdpr_api_tester.egg-info
-.idea
+
+# Python cache and test artifacts
 gdpr_api_tester/__pycache__
-.github/skills
+__pycache__/
+.coverage
+.coverage.*
+
+# Local runtime secrets/artifacts
+gdpr_api_tester_key.pem
+
+# IDE and local tooling
+.idea
 .vscode
+.github/skills

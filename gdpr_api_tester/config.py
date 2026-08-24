@@ -79,7 +79,7 @@ class AppConfig:
     SID: str = "00000000-0000-4000-9000-000000000001"
 
     def get_keys(self):
-        return [field for field in self.__annotations__ if field.isupper()]
+        return [field for field in type(self).__annotations__ if field.isupper()]
 
     def __init__(self, env):
         for field in self.get_keys():
@@ -95,7 +95,7 @@ class AppConfig:
         if name not in self.get_keys():
             raise ValueError('Unknown config key: "{}"'.format(name))
 
-        typ = self.__annotations__[name]
+        typ = type(self).__annotations__[name]
 
         self.__setattr__(name, typ(value))
 

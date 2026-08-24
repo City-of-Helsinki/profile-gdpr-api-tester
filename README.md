@@ -75,6 +75,37 @@ pip install -r requirements.txt
 python -m gdpr_api_tester
 ```
 
+### Testing
+
+This project uses pytest for unit testing.
+
+#### pytest
+
+Install test dependencies:
+
+```shell
+pip install -e ".[test]"
+```
+
+Run all tests:
+
+```shell
+pytest
+```
+
+Run tests in a specific file:
+
+```shell
+pytest tests/test_example.py
+```
+
+Run tests with coverage:
+
+```shell
+coverage run -m pytest
+coverage report
+```
+
 # Configuration
 
 The tool reads configuration from environment variables and from a file named `.env`. There is an example env file ([env.example](env.example)) in the repository. You can use it as a base for your own configuration.

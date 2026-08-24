@@ -115,9 +115,7 @@ def is_valid_gdpr_api_errors(response_json):
     except AttributeError:
         return False
 
-    try:
-        iter(errors)
-    except TypeError:
+    if not isinstance(errors, list):
         return False
 
     return all(_is_valid_gdpr_api_error(error) for error in errors)

@@ -21,6 +21,12 @@ dynamic = ["dependencies", "version"]
 "Homepage" = "https://github.com/City-of-Helsinki/profile-gdpr-api-tester"
 "Bug Tracker" = "https://github.com/City-of-Helsinki/profile-gdpr-api-tester/issues"
 
+[project.optional-dependencies]
+test = [
+  "pytest>=8.0",
+  "coverage[toml]>=7.6",
+]
+
 [project.scripts]
 gdpr_api_tester = "gdpr_api_tester.main:main"
 
@@ -34,3 +40,19 @@ version = {file = "VERSION"}
 
 [tool.setuptools.packages]
 find = {}
+
+[tool.pytest.ini_options]
+pythonpath = "."
+testpaths = "tests"
+norecursedirs = [
+  ".git",
+  ".venv",
+  "venv",
+  "dist",
+  "build",
+]
+
+[tool.coverage.run]
+source = ["gdpr_api_tester"]
+relative_files = true
+branch = true

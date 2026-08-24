@@ -77,7 +77,8 @@ python -m gdpr_api_tester
 
 ### Testing
 
-This project uses pytest for unit testing.
+This project uses pytest for unit testing and Hatch for matrix test
+environments.
 
 #### pytest
 
@@ -104,6 +105,28 @@ Run tests with coverage:
 ```shell
 coverage run -m pytest
 coverage report
+```
+
+#### hatch
+
+If `hatch` is not available on your shell PATH, use module invocation:
+
+Run the default matrix (Python 3.12, 3.13 and 3.14):
+
+```shell
+python -m hatch test
+```
+
+Run only one Python version from the matrix:
+
+```shell
+python -m hatch test -i py=3.14
+```
+
+Run matrix tests with coverage output:
+
+```shell
+python -m hatch test --cover
 ```
 
 # Configuration

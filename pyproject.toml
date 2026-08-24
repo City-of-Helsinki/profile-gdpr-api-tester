@@ -25,6 +25,10 @@ dynamic = ["dependencies", "version"]
 test = [
   "pytest>=8.0",
   "coverage[toml]>=7.6",
+  "hatch>=1.14",
+]
+all = [
+  "gdpr-api-tester[test]",
 ]
 
 [project.scripts]
@@ -56,3 +60,29 @@ norecursedirs = [
 source = ["gdpr_api_tester"]
 relative_files = true
 branch = true
+
+[tool.hatch.envs.default]
+features = ["test"]
+
+[tool.hatch.envs.default.scripts]
+test = "pytest {args}"
+
+[tool.hatch.envs.hatch-test]
+default-args = ["tests"]
+
+[[tool.hatch.envs.hatch-test.matrix]]
+python = ["3.12", "3.13", "3.14"]
+
+[tool.hatch.envs.hatch-test.scripts]
+run = [
+  "pytest{env:HATCH_TEST_ARGS:} {args}",
+]
+run-cov = [
+  "coverage run --parallel-mode -m pytest{env:HATCH_TEST_ARGS:} {args}",
+]
+cov-combine = [
+  "coverage combine",
+]
+cov-report = [
+  "coverage report",
+]

@@ -96,7 +96,7 @@ pytest
 Run tests in a specific file:
 
 ```shell
-pytest tests/test_example.py
+pytest tests/main/test_main_helpers.py
 ```
 
 Run tests with coverage:

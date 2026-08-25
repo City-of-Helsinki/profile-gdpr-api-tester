@@ -85,7 +85,7 @@ environments.
 Install test dependencies:
 
 ```shell
-pip install -e ".[test]"
+pip install -r requirements-test.txt
 ```
 
 Run all tests:

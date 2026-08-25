@@ -1,0 +1,4 @@
+-c requirements.txt
+pytest>=8.0
+coverage[toml]>=7.6
+hatch>=1.14

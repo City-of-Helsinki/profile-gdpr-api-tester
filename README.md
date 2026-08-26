@@ -148,6 +148,18 @@ Basic `ruff` commands:
 [`pre-commit`](https://pre-commit.com/) can be used to install and run
 formatting tools as Git hooks automatically before a commit.
 
+Install the hooks:
+
+```shell
+uv run pre-commit install --install-hooks --hook-type pre-commit --hook-type commit-msg
+```
+
+Run all hooks manually:
+
+```shell
+uv run pre-commit run --all-files
+```
+
 # Configuration
 
 The tool reads configuration from environment variables and from a file named `.env`. There is an example env file ([env.example](env.example)) in the repository. You can use it as a base for your own configuration.

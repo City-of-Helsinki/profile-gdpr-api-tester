@@ -21,7 +21,12 @@ ENV PATH="/app/.venv/bin:$PATH"
 
 COPY docker-entrypoint.sh /app/docker-entrypoint.sh
 
-RUN chmod +x /app/docker-entrypoint.sh
+# Prepare entrypoint permissions and create non-root runtime user
+RUN chmod +x /app/docker-entrypoint.sh \
+  && useradd -m -u 1000 appuser \
+  && chown -R appuser:appuser /app
+
+USER appuser
 
 EXPOSE 8888
 

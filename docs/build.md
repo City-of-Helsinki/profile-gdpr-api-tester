@@ -19,26 +19,26 @@ docker push profile-gdpr-api-tester:latest ghcr.io/city-of-helsinki/profile-gdpr
 
 # Pypi
 
-Install build requirements (replace `<os>` with your operating system)
+Sync build dependencies
 
 ```shell
-pip install -r requirements.txt -r requirements-build.<os>.txt
+uv sync --group build
 ```
 
 Build the python distribution. The results will be in the [project_root]/dist-directory.
 
 ```shell
-python -m build
+uv run hatch build
 ```
 
 Upload to [Test PyPI](https://test.pypi.org/project/gdpr-api-tester/) and verify everything looks ok there.
 
 ```shell
-twine upload -r testpypi dist/*
+uv run twine upload -r testpypi dist/*
 ```
 
 Upload to PyPI proper
 
 ```shell
-twine upload dist/*
+uv run twine upload dist/*
 ```

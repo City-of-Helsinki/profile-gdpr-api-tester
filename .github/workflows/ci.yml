@@ -1,4 +1,4 @@
-name: CI
+name: Continuous integration
 
 on:
   push:
@@ -38,11 +38,14 @@ jobs:
       with:
         python-version: "3.14"
 
-    - name: Install Ruff
-      run: python -m pip install ruff==0.13.0
+    - name: Set up uv
+      uses: astral-sh/setup-uv@v6
+
+    - name: Sync dependencies
+      run: uv sync --locked --group test
 
     - name: Run Ruff
-      run: ruff check .
+      run: uv run ruff check .
 
   tests:
     name: Python ${{ matrix.python_version }}
@@ -66,20 +69,44 @@ jobs:
       with:
         python-version: ${{ matrix.python_version }}
 
-    - name: Install hatch
-      run: python -m pip install hatch==1.18.0
+    - name: Set up uv
+      uses: astral-sh/setup-uv@v6
+
+    - name: Sync dependencies
+      run: uv sync --locked --group test
 
     - name: Run tests
-      run: hatch test -c -i py=${{ matrix.python_version }}
+      run: uv run hatch test --cover -c -i py=${{ matrix.python_version }}
 
     - name: Generate coverage report
-      run: hatch run coverage xml -o coverage-${{ matrix.python_version }}.xml
+      run: uv run coverage xml -o coverage-${{ matrix.python_version }}.xml
 
     - name: Upload coverage report
       uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
       with:
         name: coverage-${{ matrix.python_version }}
         path: coverage-${{ matrix.python_version }}.xml
+
+  build:
+    name: Build package
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+    - name: Set up Python 3.12
+      uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+      with:
+        python-version: "3.12"
+
+    - name: Set up uv
+      uses: astral-sh/setup-uv@v6
+
+    - name: Sync dependencies
+      run: uv sync --locked --group test --group build
+
+    - name: Build
+      run: uv run hatch build
 
   sonarcloud:
     name: Run SonarQube Cloud Scan

@@ -69,64 +69,68 @@ docker run -i -p 8888:8888 --env-file .env gdpr-api-tester
 git clone https://github.com/City-of-Helsinki/profile-gdpr-api-tester
 cd profile-gdpr-api-tester
 cp env.example .env
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-python -m gdpr_api_tester
+uv sync
+uv run python -m gdpr_api_tester
 ```
 
 ### Testing
 
-This project uses pytest for unit testing and Hatch for matrix test
-environments.
-
-#### pytest
+This project uses pytest for unit testing and uv for dependency and command
+management.
 
 Install test dependencies:
 
 ```shell
-pip install -r requirements-test.txt
+uv sync --group test
 ```
 
 Run all tests:
 
 ```shell
-pytest
+uv run pytest
 ```
 
 Run tests in a specific file:
 
 ```shell
-pytest tests/main/test_main_helpers.py
+uv run pytest tests/main/test_main_helpers.py
 ```
 
 Run tests with coverage:
 
 ```shell
-coverage run -m pytest
-coverage report
+uv run coverage run -m pytest
+uv run coverage report
 ```
 
-#### hatch
+#### hatch (optional matrix testing)
 
-If `hatch` is not available on your shell PATH, use module invocation:
+Hatch is still supported for matrix runs across Python versions.
 
 Run the default matrix (Python 3.12, 3.13 and 3.14):
 
 ```shell
-python -m hatch test --all
+uv run hatch test --all
 ```
 
 Run only one Python version from the matrix:
 
 ```shell
-python -m hatch test --all -i py=3.14
+uv run hatch test --all -i py=3.14
 ```
 
 Run matrix tests with coverage output:
 
 ```shell
-python -m hatch test --all --cover
+uv run hatch test --all --cover
+```
+
+### Lockfile
+
+Update `uv.lock` after dependency changes:
+
+```shell
+uv lock
 ```
 
 ### Code format
@@ -136,10 +140,10 @@ quality checking.
 
 Basic `ruff` commands:
 
-* lint: `ruff check`
-* apply safe lint fixes: `ruff check --fix`
-* check formatting: `ruff format --check`
-* format: `ruff format`
+* lint: `uv run ruff check`
+* apply safe lint fixes: `uv run ruff check --fix`
+* check formatting: `uv run ruff format --check`
+* format: `uv run ruff format`
 
 [`pre-commit`](https://pre-commit.com/) can be used to install and run
 formatting tools as Git hooks automatically before a commit.

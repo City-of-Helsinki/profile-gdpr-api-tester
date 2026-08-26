@@ -8,6 +8,13 @@ readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE"]
 requires-python = ">=3.12"
+dependencies = [
+  "aioconsole",
+  "aiohttp",
+  "colorama",
+  "python-dotenv",
+  "python-jose",
+]
 classifiers = [
     "Intended Audience :: Developers",
     "Environment :: Console",
@@ -15,7 +22,7 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Topic :: Software Development :: Quality Assurance",
 ]
-dynamic = ["dependencies", "version"]
+dynamic = ["version"]
 
 [project.urls]
 "Homepage" = "https://github.com/City-of-Helsinki/profile-gdpr-api-tester"
@@ -32,6 +39,18 @@ all = [
   "gdpr-api-tester[test]",
 ]
 
+[dependency-groups]
+test = [
+  "pytest>=8.0",
+  "coverage[toml]>=7.6",
+  "hatch>=1.14",
+  "ruff>=0.13.0",
+]
+build = [
+  "hatch>=1.14",
+  "twine>=4.0",
+]
+
 [project.scripts]
 gdpr_api_tester = "gdpr_api_tester.main:main"
 
@@ -40,7 +59,6 @@ requires = ["setuptools>=77.0.3"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.dynamic]
-dependencies = {file = ["requirements.txt"]}
 version = {file = "VERSION"}
 
 [tool.setuptools.packages]
@@ -88,6 +106,10 @@ select = [
 ]
 extend-per-file-ignores = { "*/tests/*" = ["E501"], "gdpr_api_tester/main.py" = ["T201"], "gdpr_api_tester/rsa_key.py" = ["T201"] }
 
+[tool.uv]
+default-groups = ["test"]
+exclude-newer = "14 days"
+
 [tool.hatch.envs.default]
 features = ["test"]
 
@@ -113,3 +135,11 @@ cov-combine = [
 cov-report = [
   "coverage report",
 ]
+
+[tool.hatch.envs.hatch-uv]
+dependencies = [
+  "uv>=0.7",
+]
+[tool.hatch.envs.hatch-uv.scripts]
+sync = "uv sync --group test"
+lock = "uv lock"

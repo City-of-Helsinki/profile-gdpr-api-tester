@@ -13,7 +13,7 @@ from colorama import Fore, Style, just_fix_windows_console
 from jose import jwt
 from jose.constants import ALGORITHMS
 
-from .config import app_config, IssuerType
+from .config import IssuerType, app_config
 from .routes import routes
 
 HELP_TEXT = """
@@ -74,9 +74,7 @@ def generate_api_token(scopes=None):
                 kc_scopes = [s.rsplit(".", 1)[-1] for s in scopes]
                 claims["authorization"] = {"permissions": [{"scopes": kc_scopes}]}
 
-    token = jwt.encode(
-        claims, key=rsa_key, algorithm=ALGORITHMS.RS256, headers={"kid": kid}
-    )
+    token = jwt.encode(claims, key=rsa_key, algorithm=ALGORITHMS.RS256, headers={"kid": kid})
 
     return token, claims
 
@@ -87,9 +85,7 @@ COMMON_RESPONSE_CODE_EXPLANATION = {
     400: _FAILURE_PREFIX + "Parameters in the request failed validation",
     401: _FAILURE_PREFIX + "Credentials in the request were missing or were invalid.",
     404: _FAILURE_PREFIX + "GDPR API not found. Misconfigured?",
-    500: _FAILURE_PREFIX
-    + "There has been an unexpected error.\n\n"
-    + "The error(s) may be detailed in the response:",
+    500: _FAILURE_PREFIX + "There has been an unexpected error.\n\n" + "The error(s) may be detailed in the response:",
 }
 
 
@@ -122,17 +118,14 @@ def is_valid_gdpr_api_errors(response_json):
 
 
 async def get_query_explanation(response):
-    QUERY_RESPONSE_CODE_EXPLANATION = COMMON_RESPONSE_CODE_EXPLANATION.copy()
-    QUERY_RESPONSE_CODE_EXPLANATION.update({
-        204: Fore.GREEN
-        + "Success. There is no personal data related to the profile.\n"
-        + Style.RESET_ALL,
-    })
-
-    explanation = (
-        f"Response status code: {response.status}\n"
-        f"How the Profile back-end would interpret the response:\n\n"
+    query_response_code_explanation = COMMON_RESPONSE_CODE_EXPLANATION.copy()
+    query_response_code_explanation.update(
+        {
+            204: Fore.GREEN + "Success. There is no personal data related to the profile.\n" + Style.RESET_ALL,
+        }
     )
+
+    explanation = f"Response status code: {response.status}\nHow the Profile back-end would interpret the response:\n\n"
 
     response_content = await response.text()
 
@@ -150,41 +143,36 @@ async def get_query_explanation(response):
             explanation += response_json_string
         else:
             explanation += Fore.RED + "Failure.\n" + Style.RESET_ALL
-            explanation += (
-                "No content in response or JSON parsing failed. Raw content:\n"
-            )
+            explanation += "No content in response or JSON parsing failed. Raw content:\n"
             explanation += response_content
     else:
-        if response.status in QUERY_RESPONSE_CODE_EXPLANATION:
-            explanation += QUERY_RESPONSE_CODE_EXPLANATION[response.status] + "\n"
+        if response.status in query_response_code_explanation:
+            explanation += query_response_code_explanation[response.status] + "\n"
         else:
             explanation += Fore.RED + "Unknown response status code\n" + Style.RESET_ALL
 
         if response_json_string:
             explanation += response_json_string
         else:
-            explanation += (
-                "No content in response or JSON parsing failed. Raw content:\n"
-            )
+            explanation += "No content in response or JSON parsing failed. Raw content:\n"
             explanation += response_content
 
     return explanation
 
 
 async def get_delete_explanation(response, dry_run=False):
-    DELETE_RESPONSE_CODE_EXPLANATION = COMMON_RESPONSE_CODE_EXPLANATION.copy()
-    DELETE_RESPONSE_CODE_EXPLANATION.update({
-        403: Fore.YELLOW
-        + "Deletion denied. "
-        + Style.RESET_ALL
-        + "Data can not be removed from the service.\n\n"
-        + "The reason(s) for the failure may be detailed in the response:",
-    })
-
-    explanation = (
-        f"Response status code: {response.status}\n"
-        f"How the Profile back-end would interpret the response:\n\n"
+    delete_response_code_explanation = COMMON_RESPONSE_CODE_EXPLANATION.copy()
+    delete_response_code_explanation.update(
+        {
+            403: Fore.YELLOW
+            + "Deletion denied. "
+            + Style.RESET_ALL
+            + "Data can not be removed from the service.\n\n"
+            + "The reason(s) for the failure may be detailed in the response:",
+        }
     )
+
+    explanation = f"Response status code: {response.status}\nHow the Profile back-end would interpret the response:\n\n"
 
     if response.status == 204:
         if not dry_run:
@@ -203,8 +191,8 @@ async def get_delete_explanation(response, dry_run=False):
 
         return explanation
 
-    if response.status in DELETE_RESPONSE_CODE_EXPLANATION:
-        explanation += DELETE_RESPONSE_CODE_EXPLANATION[response.status] + "\n"
+    if response.status in delete_response_code_explanation:
+        explanation += delete_response_code_explanation[response.status] + "\n"
     else:
         explanation += "Unknown response status code\n"
 
@@ -213,17 +201,9 @@ async def get_delete_explanation(response, dry_run=False):
         try:
             response_json = await response.json()
             if is_valid_gdpr_api_errors(response_json):
-                explanation += (
-                    Fore.GREEN
-                    + "(The errors are in the correct format)\n"
-                    + Style.RESET_ALL
-                )
+                explanation += Fore.GREEN + "(The errors are in the correct format)\n" + Style.RESET_ALL
             else:
-                explanation += (
-                    Fore.RED
-                    + "(The errors are NOT in the correct format)\n"
-                    + Style.RESET_ALL
-                )
+                explanation += Fore.RED + "(The errors are NOT in the correct format)\n" + Style.RESET_ALL
 
             response_json_string = json.dumps(response_json, indent=4)
         except ContentTypeError:
@@ -238,9 +218,7 @@ async def get_delete_explanation(response, dry_run=False):
 
 
 async def _handle_query_command():
-    response = await make_gdpr_api_request(
-        "get", [app_config.GDPR_API_QUERY_SCOPE]
-    )
+    response = await make_gdpr_api_request("get", [app_config.GDPR_API_QUERY_SCOPE])
     if response:
         await aprint(await get_query_explanation(response))
 
@@ -250,9 +228,7 @@ async def _handle_delete_command(arguments):
     params = {}
     if dry_run:
         params["dry_run"] = "true"
-    response = await make_gdpr_api_request(
-        "delete", [app_config.GDPR_API_DELETE_SCOPE], params
-    )
+    response = await make_gdpr_api_request("delete", [app_config.GDPR_API_DELETE_SCOPE], params)
     if response:
         await aprint(await get_delete_explanation(response, dry_run=dry_run))
 
@@ -263,9 +239,7 @@ async def _handle_set_command(arguments):
         if matches:
             try:
                 app_config.set_config(matches["key"], matches["value"])
-                await aprint(
-                    "Set config", matches["key"], "value to", matches["value"]
-                )
+                await aprint("Set config", matches["key"], "value to", matches["value"])
             except Exception as e:
                 await aprint(str(e))
     else:
@@ -278,9 +252,7 @@ async def make_gdpr_api_request(method, scopes, params=None):
     authorization = "Bearer " + token
 
     headers = {"Authorization": authorization}
-    async with ClientSession(
-        headers=headers, timeout=aiohttp.ClientTimeout(total=10)
-    ) as session:
+    async with ClientSession(headers=headers, timeout=aiohttp.ClientTimeout(total=10)) as session:
         final_url = session._build_url(url).update_query(params)
 
         await aprint("\nSending GDPR API request")
@@ -295,7 +267,7 @@ async def make_gdpr_api_request(method, scopes, params=None):
             return response
         except aiohttp.ClientError as e:
             await aprint(e)
-        except asyncio.TimeoutError:
+        except TimeoutError:
             await aprint("The request timed out")
 
 

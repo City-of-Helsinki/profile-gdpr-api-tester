@@ -18,11 +18,7 @@ async def handle_openid_configuration(request):
     subject_types_supported and id_token_signing_alg_values_supported are
     required by the spec.
     """
-    jwks_uri = (
-        app_config.ISSUER
-        + ("/" if not app_config.ISSUER.endswith("/") else "")
-        + "jwks"
-    )
+    jwks_uri = app_config.ISSUER + ("/" if not app_config.ISSUER.endswith("/") else "") + "jwks"
 
     data = {
         "issuer": app_config.ISSUER,

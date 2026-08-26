@@ -1,8 +1,8 @@
 import os
-
 from enum import Enum
 
 from dotenv import find_dotenv, load_dotenv
+
 
 class IssuerType(Enum):
     TUNNISTAMO = "tunnistamo"
@@ -22,6 +22,7 @@ load_dotenv(dotenv_path=find_dotenv(usecwd=True))
 
 class AppConfig:
     """Simple class for holding configuration values with support for a default value"""
+
     # The issuer in the generated API tokens and the address of the GDPR API Tester
     #   e.g. http://127.0.0.1:8888/
     #   The API must have connectivity to this address because the JWT token
@@ -85,15 +86,13 @@ class AppConfig:
         for field in self.get_keys():
             default_value = getattr(self, field, None)
             if default_value is None and env.get(field) is None:
-                raise RuntimeError(
-                    "The configuration field \"{}\" is required".format(field)
-                )
+                raise RuntimeError(f'The configuration field "{field}" is required')
 
             self.set_config(field, env.get(field, default_value))
 
     def set_config(self, name, value):
         if name not in self.get_keys():
-            raise ValueError('Unknown config key: "{}"'.format(name))
+            raise ValueError(f'Unknown config key: "{name}"')
 
         typ = type(self).__annotations__[name]
 

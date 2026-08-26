@@ -17,7 +17,7 @@ def _get_or_create_rsa_key() -> Key:
         flush=True,
     )
     try:
-        with open("gdpr_api_tester_key.pem", "r") as f:
+        with open("gdpr_api_tester_key.pem") as f:
             pem_data = f.read()
         key = jwk.construct(pem_data, ALGORITHMS.RS256)
         print("ok.", flush=True)

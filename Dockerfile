@@ -6,15 +6,19 @@ LABEL org.opencontainers.image.licenses=MIT
 
 RUN set -eux; \
   apt-get update; \
-  apt-get install -y --no-install-recommends rlwrap
+  apt-get install -y --no-install-recommends rlwrap; \
+  rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-COPY requirements.txt requirements.txt
-
-RUN pip3 install --no-cache-dir -r requirements.txt
-
+COPY pyproject.toml uv.lock README.md VERSION LICENSE /app/
 COPY /gdpr_api_tester /app/gdpr_api_tester
+
+RUN pip3 install --no-cache-dir --only-binary=:all: uv==0.12.6 \
+  && uv sync --locked --no-default-groups --no-install-project --no-build
+
+ENV PATH="/app/.venv/bin:$PATH"
+
 COPY docker-entrypoint.sh /app/docker-entrypoint.sh
 
 RUN chmod +x /app/docker-entrypoint.sh

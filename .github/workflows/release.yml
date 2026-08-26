@@ -17,7 +17,7 @@ jobs:
         with:
           python-version: 3.12
       - name: Install dependencies
-        run: pip install -U setuptools wheel build
+        run: "pip install --only-binary :all: setuptools==77.0.3 wheel==0.42.0 build==1.2.1"
       - name: Build
         run: python -m build .
       - name: Publish

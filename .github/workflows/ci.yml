@@ -27,6 +27,23 @@ jobs:
     - name: Run commitlint
       uses: wagoid/commitlint-github-action@3d28780bbf0365e29b144e272b2121204d5be5f3 # v6.1.2
 
+  ruff:
+    name: Run Ruff checks
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+    - name: Set up Python 3.14
+      uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+      with:
+        python-version: "3.14"
+
+    - name: Install Ruff
+      run: python -m pip install ruff==0.13.0
+
+    - name: Run Ruff
+      run: ruff check .
+
   tests:
     name: Python ${{ matrix.python_version }}
     runs-on: ubuntu-latest

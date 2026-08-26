@@ -9,18 +9,18 @@ def _import_fresh_rsa_key_module(monkeypatch, request, tmp_path, *, fake_newkeys
     monkeypatch.chdir(tmp_path)
     monkeypatch.setattr(rsa, "newkeys", fake_newkeys)
     monkeypatch.setattr(jwk, "construct", fake_construct)
-    
+
     # Save original module state and register cleanup for restoration
     original_module = sys.modules.pop("gdpr_api_tester.rsa_key", None)
-    
+
     def restore_module():
         if original_module is not None:
             sys.modules["gdpr_api_tester.rsa_key"] = original_module
         else:
             sys.modules.pop("gdpr_api_tester.rsa_key", None)
-    
+
     request.addfinalizer(restore_module)
-    
+
     return importlib.import_module("gdpr_api_tester.rsa_key")
 
 

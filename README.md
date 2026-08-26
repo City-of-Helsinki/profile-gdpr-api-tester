@@ -129,6 +129,21 @@ Run matrix tests with coverage output:
 python -m hatch test --all --cover
 ```
 
+### Code format
+
+This project uses [Ruff](https://docs.astral.sh/ruff/) for code formatting and
+quality checking.
+
+Basic `ruff` commands:
+
+* lint: `ruff check`
+* apply safe lint fixes: `ruff check --fix`
+* check formatting: `ruff format --check`
+* format: `ruff format`
+
+[`pre-commit`](https://pre-commit.com/) can be used to install and run
+formatting tools as Git hooks automatically before a commit.
+
 # Configuration
 
 The tool reads configuration from environment variables and from a file named `.env`. There is an example env file ([env.example](env.example)) in the repository. You can use it as a base for your own configuration.

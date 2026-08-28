@@ -47,3 +47,19 @@ Upload to PyPI proper
 ```shell
 uv run twine upload dist/*
 ```
+
+## Trusted publishing (GitHub Actions)
+
+This repository uses trusted publishing (OIDC) in GitHub Actions for PyPI and TestPyPI uploads.
+
+Before publishing, configure trusted publishers in PyPI and TestPyPI project settings:
+
+- Owner: `City-of-Helsinki`
+- Repository: `profile-gdpr-api-tester`
+- Workflow name: `publish.yml` for PyPI and `test_release.yml` for TestPyPI
+- Environment: `pypi` for both workflows
+
+After setup:
+
+- `publish.yml` runs on pushes to `main`, on a daily schedule, and manually via workflow dispatch.
+- `test_release.yml` can be run manually to publish to TestPyPI.

@@ -63,8 +63,8 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools.dynamic]
 version = {file = "VERSION"}
 
-[tool.setuptools.packages]
-find = {}
+[tool.setuptools.packages.find]
+include = ["gdpr_api_tester*"]
 
 [tool.pytest.ini_options]
 pythonpath = "."

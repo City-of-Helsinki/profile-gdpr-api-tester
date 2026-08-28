@@ -5,8 +5,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-publish:
-    name: Build and publish
+  build:
+    name: Build
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -24,10 +24,31 @@ jobs:
         run: "pip install --only-binary :all: setuptools==77.0.3 wheel==0.42.0 build==1.2.1"
       - name: Build
         run: python -m build --no-isolation .
+      - name: Upload distribution artifacts
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: python-dist
+          path: dist/*
+
+  publish:
+    name: Publish
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://test.pypi.org/project/gdpr-api-tester/
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Download distribution artifacts
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: python-dist
+          path: dist
       - name: Publish
         uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
         with:
-          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
-          repository_url: https://test.pypi.org/legacy/
-          skip_existing: true
+          repository-url: https://test.pypi.org/legacy/
+          skip-existing: true
           verbose: true

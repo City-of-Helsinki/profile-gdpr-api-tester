@@ -11,7 +11,7 @@ RUN set -eux; \
 
 WORKDIR /app
 
-COPY pyproject.toml uv.lock README.md VERSION LICENSE /app/
+COPY pyproject.toml uv.lock README.md LICENSE /app/
 COPY /gdpr_api_tester /app/gdpr_api_tester
 
 RUN pip3 install --no-cache-dir --only-binary=:all: uv==0.12.6 \

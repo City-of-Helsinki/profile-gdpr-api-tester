@@ -8,6 +8,7 @@ readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE"]
 requires-python = ">=3.12"
+version = "0.2.0"
 dependencies = [
   "aioconsole",
   "aiohttp",
@@ -22,7 +23,6 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Topic :: Software Development :: Quality Assurance",
 ]
-dynamic = ["version"]
 
 [project.urls]
 "Homepage" = "https://github.com/City-of-Helsinki/profile-gdpr-api-tester"
@@ -60,11 +60,8 @@ gdpr_api_tester = "gdpr_api_tester.main:main"
 requires = ["setuptools>=77.0.3"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools.dynamic]
-version = {file = "VERSION"}
-
-[tool.setuptools.packages]
-find = {}
+[tool.setuptools.packages.find]
+include = ["gdpr_api_tester*"]
 
 [tool.pytest.ini_options]
 pythonpath = "."

@@ -1,7 +1,7 @@
 Building and releasing the GDPR API Tester
 ==========================================
 
-Update version number in `VERSION` file.
+Version is managed in `pyproject.toml` and updated by Release Please.
 
 # GitHub package
 
@@ -11,9 +11,14 @@ Create GitHub personal access token. See [GitHub documentation](https://docs.git
 export CR_PAT=[Github Access token]
 echo $CR_PAT | docker login ghcr.io -u [GitHub username] --password-stdin
 
+IMAGE=ghcr.io/city-of-helsinki/profile-gdpr-api-tester
+VERSION=$(awk -F '"' '/^version = "/ {print $2; exit}' pyproject.toml)
+
 docker build -t profile-gdpr-api-tester .
-docker push profile-gdpr-api-tester:latest ghcr.io/city-of-helsinki/profile-gdpr-api-tester:$(cat VERSION)
-docker push profile-gdpr-api-tester:latest ghcr.io/city-of-helsinki/profile-gdpr-api-tester:latest
+docker tag profile-gdpr-api-tester "$IMAGE:$VERSION"
+docker tag profile-gdpr-api-tester "$IMAGE:latest"
+docker push "$IMAGE:$VERSION"
+docker push "$IMAGE:latest"
 ```
 
 

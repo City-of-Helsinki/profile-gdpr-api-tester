@@ -685,7 +685,7 @@ wheels = [
 
 [[package]]
 name = "gdpr-api-tester"
-version = "0.1.0"
+version = "1.0.0"
 source = { editable = "." }
 default-groups = ["test"]
 dependencies = [

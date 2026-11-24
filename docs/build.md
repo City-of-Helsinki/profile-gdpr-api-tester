@@ -21,36 +21,9 @@ docker push "$IMAGE:$VERSION"
 docker push "$IMAGE:latest"
 ```
 
+# PyPI
 
-# Pypi
-
-Sync build dependencies
-
-```shell
-uv sync --group build
-```
-
-Build the python distribution. The results will be in the [project_root]/dist-directory.
-
-```shell
-uv run hatch build
-```
-
-Upload to [Test PyPI](https://test.pypi.org/project/gdpr-api-tester/) and verify everything looks ok there.
-
-```shell
-uv run twine upload -r testpypi dist/*
-```
-
-Upload to PyPI proper
-
-```shell
-uv run twine upload dist/*
-```
-
-## Trusted publishing (GitHub Actions)
-
-This repository uses trusted publishing (OIDC) in GitHub Actions for PyPI and TestPyPI uploads.
+This repository publishes to PyPI and TestPyPI via GitHub Actions using trusted publishing (OIDC).
 
 Before publishing, configure trusted publishers in PyPI and TestPyPI project settings:
 

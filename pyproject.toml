@@ -21,6 +21,10 @@ classifiers = [
     "Environment :: Console",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Software Development :: Quality Assurance",
 ]
 
@@ -57,11 +61,11 @@ build = [
 gdpr_api_tester = "gdpr_api_tester.main:main"
 
 [build-system]
-requires = ["setuptools>=77.0.3"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
-[tool.setuptools.packages]
-find = {}
+[tool.hatch.build.targets.wheel]
+packages = ["gdpr_api_tester"]
 
 [tool.pytest.ini_options]
 pythonpath = "."
